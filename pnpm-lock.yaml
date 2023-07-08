@@ -1,9 +1,13 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   html-entities:
-    specifier: ^2.3.3
-    version: 2.3.3
+    specifier: ^2.4.0
+    version: 2.4.0
   needle:
     specifier: ^3.2.0
     version: 3.2.0
@@ -15,6 +19,9 @@ devDependencies:
   '@types/chai-as-promised':
     specifier: ^7.1.5
     version: 7.1.5
+  '@types/html-entities':
+    specifier: ^1.3.4
+    version: 1.3.4
   '@types/mocha':
     specifier: ^10.0.1
     version: 10.0.1
@@ -612,6 +619,13 @@ packages:
 
   /@types/chai@4.3.4:
     resolution: {integrity: sha512-KnRanxnpfpjUTqTCXslZSEdLfXExwgNxYPdiO2WGUj8+HDjFi8R3k5RVKPeSCzLjCcshCAtVO2QBbVuAV4kTnw==}
+    dev: true
+
+  /@types/html-entities@1.3.4:
+    resolution: {integrity: sha512-Ut62LV90H9tgXwyhmfR8U6yCw/6xeo26IlsbAJJfqPomaqDN2zoLb2Z+cbmy5AycJFhwNJDdH0zqjQp7Ox/eXg==}
+    deprecated: This is a stub types definition. html-entities provides its own type definitions, so you do not need this installed.
+    dependencies:
+      html-entities: 2.4.0
     dev: true
 
   /@types/json-schema@7.0.11:
@@ -1957,9 +1971,8 @@ packages:
     hasBin: true
     dev: true
 
-  /html-entities@2.3.3:
-    resolution: {integrity: sha512-DV5Ln36z34NNTDgnz0EWGBLZENelNAtkiFA4kyNOG2tDI6Mz1uSWiq1wAKdyjnJwyDiDO7Fa2SO1CTxPXL8VxA==}
-    dev: false
+  /html-entities@2.4.0:
+    resolution: {integrity: sha512-igBTJcNNNhvZFRtm8uA6xMY6xYleeDwn3PeBCkDz7tHttv4F2hsDI2aPgNERWzvRcNYHNT3ymRaQzllmXj4YsQ==}
 
   /html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}

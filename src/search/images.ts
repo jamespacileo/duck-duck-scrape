@@ -1,5 +1,5 @@
-import { decode } from 'html-entities';
-import needle, { NeedleOptions } from 'needle';
+// import { decode } from 'html-entities';
+// import needle, { NeedleOptions } from 'needle';
 
 import { DuckbarImageResult, DuckbarResponse } from '../types';
 import { ensureJSON, getVQD, queryString, SafeSearchType } from '../util';
@@ -121,11 +121,13 @@ export interface ImageSearchOptions {
   license?: ImageLicense;
 }
 
+
 const defaultOptions: ImageSearchOptions = {
   safeSearch: SafeSearchType.OFF,
   locale: 'en-us',
   offset: 0
 };
+
 
 /** The search results from {@link searchImages}. */
 export interface ImageSearchResults {
@@ -142,16 +144,15 @@ export interface ImageSearchResults {
  * @category Search
  * @param query The query to search with
  * @param options The options of the search
- * @param needleOptions The options of the HTTP request
  * @returns Search results
  */
-export async function searchImages(query: string, options?: ImageSearchOptions, needleOptions?: NeedleOptions): Promise<ImageSearchResults> {
+export async function searchImages(query: string, options?: ImageSearchOptions): Promise<ImageSearchResults> {
   if (!query) throw new Error('Query cannot be empty!');
   if (!options) options = defaultOptions;
   else options = sanityCheck(options);
 
   let vqd = options.vqd!;
-  if (!vqd) vqd = await getVQD(query, 'web', needleOptions);
+  if (!vqd) vqd = await getVQD(query, 'web');
 
   /* istanbul ignore next */
   const filters = [
@@ -161,7 +162,7 @@ export async function searchImages(query: string, options?: ImageSearchOptions, 
     options.color ? `color:${options.color}` : '',
     options.license ? `license:${options.license}` : ''
   ];
-
+ 
   const queryObject: Record<string, string> = {
     l: options.locale!,
     o: 'json',
@@ -172,18 +173,20 @@ export async function searchImages(query: string, options?: ImageSearchOptions, 
     s: String(options.offset || 0)
   };
 
-  const response = await needle('get', `https://duckduckgo.com/i.js?${queryString(queryObject)}`, needleOptions);
+  const response = await fetch(`https://duckduckgo.com/i.js?${queryString(queryObject)}`);
 
-  if (response.statusCode === 403) throw new Error('A server error occurred!');
+  if (!response.ok) throw new Error('A server error occurred!');
 
-  const imagesResult = ensureJSON(response.body) as DuckbarResponse<DuckbarImageResult>;
+  const imagesResult = ensureJSON(await response.json()) as DuckbarResponse<DuckbarImageResult>;
+
+  const domparser = new DOMParser();
 
   return {
     noResults: !imagesResult.results.length,
     vqd,
     results: imagesResult.results.map((image) => ({
       ...image,
-      title: decode(image.title)
+      title: domparser.parseFromString(image.title, "text/html").documentElement.textContent!
     }))
   };
 }
